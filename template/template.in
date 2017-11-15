@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <title>@title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@desc">
+    <meta name="author" content="Paul Tunbridge based on Dark Souls Cheat Sheet by Stephen McNabb">
+    <style type="text/css">
+        @css
+    </style>
+    <script type="text/javascript">
+        @js
+    </script>
+</head>
+<body onload="DocumentLoad()">
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <h1>@title</h1>
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tabList" data-toggle="tab">@listname</a></li>
+                    <li><a href="#tabChecklists" data-toggle="tab">Checklists</a></li>
+                    <li><a href="#tabInformation" data-toggle="tab">Information</a></li>
+                    <li><a href="#tabHelp" data-toggle="tab">Help</a></li>
+                </ul>
+                <div class="profile" style="float: right;">
+                    <a href="#" onclick="ClearAll()">Clear All</a>
+                    <a href="#" onclick="SelectAll()">Select All</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="intro">
+
+            <p>@long_desc</p>
+            <p><em>@long_desc_subtitle</em></p>
+        </div>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="tabList">
+            @content
+            </div>
+
+        </div>
+    </div>
+</body>

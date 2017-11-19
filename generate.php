@@ -156,6 +156,7 @@ $body->SetListName($listname);
 $body->SetDesc($desc);
 $body->SetLongDesc($long_desc);
 $body->SetSubtitle($long_desc_subtitle);
+$body->AddHeaderContent("<ul>","\n");
 
 #create content
 foreach(glob("sections/*.md") as $filename)
@@ -164,11 +165,14 @@ foreach(glob("sections/*.md") as $filename)
     $s = new Section($default_link_location,$default_link_space_character,$section);
     $s->GenerateSection($filename);
 
-    $body->AddContent("<div section-header-id=\"".$section."\">","\n");
+    $body->AddContent("<a id=\"".$s->GetSectionLinkName()."\"></a><div section-header-id=\"".$section."\">","\n");
     $body->AddContent("<h3 onclick=\"ToggleHeader(".$section.")\">".$s->GetNiceName()." <span title-section=\"".$section."\" title-id=\"title_".$section."\"></span></h3>","\n");
     $body->AddContent($s->GetContentString(),"\n");
     $body->AddContent("</div>","\n");
+    $body->AddHeaderContent("<li><a href=\"#".$s->GetSectionLinkName()."\" >".$s->GetNiceName()."</a> <span title-header-id=\"title_".$section."\"></span></li>","\n");
 }
+
+$body->AddHeaderContent("</ul>","\n");
 
 foreach(glob("js/*.js") as $filename) $body->AddJSFile($filename);
 foreach(glob("css/*.css") as $filename) $body->AddCSSFile($filename);

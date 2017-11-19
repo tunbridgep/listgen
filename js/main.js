@@ -69,6 +69,7 @@ function SelectAll()
 
 function UpdateHeader(id)
 {
+    debugger;
     var checkboxes = document.querySelectorAll('[section-id="'+id+'"]');
     var total = checkboxes.length;
     var count = 0;
@@ -77,16 +78,21 @@ function UpdateHeader(id)
             count++;
 
     var title = document.querySelectorAll('[title-id="title_'+id+'"]')[0];
+    var title_header = document.querySelectorAll('[title-header-id="title_'+id+'"]')[0];
 
     if (count == total)
     {
         title.innerText = "[DONE]";
         title.className = "done";
+        title_header.innerText = "[DONE]";
+        title_header.className = "done";
     }
     else
     {
         title.innerText = "[" + count + "/" + total + "]";
         title.className = "in_progress";
+        title_header.innerText = "[" + count + "/" + total + "]";
+        title_header.className = "in_progress";
     }
 
 }

@@ -9,6 +9,7 @@ class Template
     private $long_desc;
     private $long_desc_subtitle;
     private $content;
+    private $header;
     private $js;
     private $css;
 
@@ -29,6 +30,7 @@ class Template
         $output = str_replace('@content',$this->content,$output);
         $output = str_replace('@js',$this->js,$output);
         $output = str_replace('@css',$this->css,$output);
+        $output = str_replace('@header',$this->header,$output);
         return $output;
     }
 
@@ -65,6 +67,11 @@ class Template
     function AddContent($c,$separator)
     {
         $this->content = $this->content . $separator . $c;
+    }
+
+    function AddHeaderContent($c,$separator)
+    {
+        $this->header = $this->header . $separator . $c;
     }
 
     function AddJSFile($filename)

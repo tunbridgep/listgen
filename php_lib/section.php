@@ -4,6 +4,7 @@ class Section
     private $content = array();
     private $name;
     private $nicename;
+    private $sectionlink_name;
     private $header;
     private $link_prefix;
     private $link_space;
@@ -47,6 +48,7 @@ class Section
         #once we have done string modifications, we can then store the result
         $this->content = $html_lines;
         $this->name = $this->GenerateName($md_file);
+        $this->sectionlink_name = $this->GenerateSectionLinkName($md_file);
         $this->nicename = $this->GenerateNiceName($md_file);
     }
 
@@ -124,6 +126,13 @@ class Section
         return $noext;
     }
 
+    private function GenerateSectionLinkName($string)
+    {
+        $name = $this->GenerateName($string);
+        $nospaces = str_replace(" ","_",$name);
+        return $nospaces;
+    }
+
     public function SetHeader($string)
     {
         $this->header = $string;
@@ -162,6 +171,11 @@ class Section
     public function GetName()
     {
         return $this->name;
+    }
+
+    public function GetSectionLinkName()
+    {
+        return $this->sectionlink_name;
     }
 
     public function GetNiceName()

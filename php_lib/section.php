@@ -42,7 +42,8 @@ class Section
         foreach($html_lines as $line => $text)
         {
             #replace line text with it's parsed version
-            $html_lines[$line] = $this->GenerateCheckbox($text);
+            $checkbox = $this->GenerateCheckbox($text);
+            $html_lines[$line] = $this->ParseSpecial($checkbox);
         }
 
         #once we have done string modifications, we can then store the result
@@ -66,6 +67,19 @@ class Section
             return $line;
         }
 
+    }
+
+    #Do any special parsing that the line needs
+    private function ParseSpecial($line)
+    {
+        if(strpos($line,"@imp") !== FALSE)
+        {
+            $str = str_replace("@imp","",$line);
+            $str = str_replace("<li>","<li class=\"important\">",$str);
+            return $str;
+        }
+        else
+            return $line;
     }
 
     private function GenerateLinks($line)

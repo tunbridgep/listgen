@@ -1,5 +1,6 @@
 .in_progress { color: #CC6600; }
 .done { color: #009933; }
+.important {color: red; font-weight: bold; }
 
 .container
 {

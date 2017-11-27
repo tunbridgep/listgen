@@ -43,7 +43,8 @@ class Section
         {
             #replace line text with it's parsed version
             $checkbox = $this->GenerateCheckbox($text);
-            $html_lines[$line] = $this->ParseSpecial($checkbox);
+            $tagged = $this->GenerateTag($checkbox);
+            $html_lines[$line] = $this->ParseSpecial($tagged);
         }
 
         #once we have done string modifications, we can then store the result
@@ -82,10 +83,53 @@ class Section
             return $line;
     }
 
+    private function GenerateTag($line)
+    {
+        #get a start point
+        $pos = strpos($line,"@tag{");
+        $after = substr($line,$pos);
+
+        #make sure we have an opening and closing brace
+        if ($pos === FALSE || strpos($after,"}") == FALSE)
+            return $line;
+
+        #our end point is at the same location as our start point
+        $forward = 0;
+
+        #keep moving the end point towards the end of the string until we find the closing brace
+        $character = "";
+        do
+        {
+            $forward++;
+            $character = substr($line,$pos + $forward,1);
+        }
+        while ($character !== "}");
+
+        #calculate tag using our start and end points
+        #we are offseting by 5 to remove the @tag{ characters from the string
+        $tag = substr($line,$pos+5,$forward-5);
+
+        #remove @tag from original string
+        $line = str_replace("@tag{".$tag."}","",$line);
+
+        #modify HTML to contain tag name in the input data-tag field
+        if ($tag != "")
+            return str_replace("<input","<input data-tag=\"".$tag."\"",$line);
+        else
+            return $line;
+
+    }
+
     private function GenerateLinks($line)
     {
         #echo "LINE BEFORE PROCESSING: ".$line."\n";
         $pos = strpos($line,"@x");
+
+        #check to make sure we have a start and end brace before the @x and that the end brace comes after the start brace
+        $before = substr($line,0,$pos);
+        if (strpos($before,"[") === FALSE || strpos($before,"]") === FALSE || strpos($before,"[") > strpos($before,"]"))
+            return $line;
+
         while ($pos !== FALSE)
         {
 

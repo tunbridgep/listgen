@@ -77,6 +77,7 @@ class Section
         {
             $str = str_replace("@imp","",$line);
             $str = str_replace("<li>","<li class=\"important\">",$str);
+            $str = str_replace("<p>","<p class=\"important\">",$str);
             return $str;
         }
         else
@@ -124,11 +125,6 @@ class Section
     {
         #echo "LINE BEFORE PROCESSING: ".$line."\n";
         $pos = strpos($line,"@x");
-
-        #check to make sure we have a start and end brace before the @x and that the end brace comes after the start brace
-        $before = substr($line,0,$pos);
-        if (strpos($before,"[") === FALSE || strpos($before,"]") === FALSE || strpos($before,"[") > strpos($before,"]"))
-            return $line;
 
         while ($pos !== FALSE)
         {

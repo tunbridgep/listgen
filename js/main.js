@@ -26,6 +26,44 @@ function DocumentLoad()
         debugger;
         SetHeader(id);
     }
+
+    prepare_tabs();
+}
+
+function activate_tab(name)
+{
+    debugger;
+    //deactivate all tabs
+    all_tabs = document.querySelectorAll('[data-tab]');
+    all_tabs_nav = document.querySelectorAll('[data-tab-nav]');
+    for (i = 0; i < all_tabs.length; i++)
+        all_tabs[i].className = "tab-pane";
+    for (j = 0; j < all_tabs_nav.length; j++)
+        all_tabs_nav[j].className = "";
+
+    //activate new tab
+    tab = document.querySelectorAll('[data-tab="'+name+'"]')[0];
+    tab_nav = document.querySelectorAll('[data-tab-nav="'+name+'"]')[0];
+    
+    tab_nav.className = "active";
+    tab.className = "tab-pane active";
+}
+
+function prepare_tabs()
+{
+    tabs = document.querySelectorAll('[data-tab]');
+    tab_navs = document.querySelectorAll('[data-tab-nav]');
+    
+    //activate first tab
+    first_tab = tabs[0];
+    activate_tab(first_tab.getAttribute('data-tab'));
+
+    //add onclick events to every tab nav
+    for(i = 0; i < tab_navs.length; i++)
+    {
+        //name = tab_navs[i].getAttribute('data-tab-nav');
+        tab_navs[i].onclick = function() { activate_tab( this.getAttribute('data-tab-nav')); };
+    }
 }
 
 function ToggleCheckbox(id)
@@ -38,7 +76,8 @@ function ToggleCheckbox(id)
         $.jStorage.set(id,true);
 
     var section = element.getAttribute("section-id");
-    UpdateHeader(section);
+    var tab = element.getAttribute("section-id");
+    UpdateHeader(section,tab);
 }
 
 function ClearAll()

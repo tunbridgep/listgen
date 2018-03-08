@@ -89,6 +89,16 @@ body
 
 /* Body Stuff */
 
+.tab-pane
+{
+    display: none;
+}
+
+.tab-pane.active
+{
+    display: block;
+}
+
 .tab-content a
 {
     color: #08c;

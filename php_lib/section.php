@@ -10,13 +10,15 @@ class Section
     private $link_space;
     private $checkbox_count;
     private $section_counter;
+    private $tab_counter;
 
-    public function __construct($prefix,$space,$section_num)
+    public function __construct($prefix,$space,$section_num,$tab_num)
     {
         $this->link_prefix = $prefix;
         $this->link_space = $space;
         $this->section_counter = $section_num;
         $this->checkbox_count = 0;
+        $this->tab_counter = $tab_num;
     }
 
     public function GenerateSection($md_file)
@@ -60,7 +62,7 @@ class Section
             return str_replace("@ign","",$line);
         else
         {
-            $line = str_replace("<li>","<li><label><input section-id=\"".$this->section_counter."\" type=\"checkbox\" data-id=\"list_".$this->section_counter."_".($this->checkbox_count++)."\"/>",$line);
+            $line = str_replace("<li>","<li><label><input type=\"checkbox\" tab-id=\"".$this->tab_counter."\" section-id=\"".$this->section_counter."\" type=\"checkbox\" data-id=\"list_".$this->tab_counter."_".$this->section_counter."_".($this->checkbox_count++)."\"/>",$line);
             if (strpos($line,"<ul>") !== FALSE)
                 $line = str_replace("<ul>","</label><ul>",$line);
             else
@@ -187,16 +189,6 @@ class Section
         return $nospaces;
     }
 
-    public function SetHeader($string)
-    {
-        $this->header = $string;
-    }
-
-    public function GetHeader()
-    {
-        return $this->header;
-    }
-
     private function GenerateNiceName($string)
     {
         $name = $this->GenerateName($string); #get base name
@@ -214,7 +206,10 @@ class Section
 
     public function GetContentString()
     {
-        return implode("\n",$this->content);
+        $html = '<a name="'.$this->sectionlink_name.'"></a>';
+        $html .= "<h2>".$this->GetNiceName()."</h2>";
+        $html .= implode("\n",$this->content);
+        return $html;
     }
 
     public function SetContent(array $md)

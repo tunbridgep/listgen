@@ -18,6 +18,7 @@
         <div class="navbar">
             <div class="navbar-inner">
                 <h1>@title</h1>
+                <p>@desc</p>
                 <ul class="nav nav-tabs">
                     @tabs
                 </ul>

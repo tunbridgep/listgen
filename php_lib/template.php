@@ -4,6 +4,7 @@ class Template
 {
     private $text;
     private $title;
+    private $desc;
     private $js;
     private $css;
     private $tabs = array();
@@ -29,6 +30,7 @@ class Template
         $output = file_get_contents($this->template_file);
         //$output = $this->text;
         $output = str_replace('@title',$this->title,$output);
+        $output = str_replace('@desc',$this->desc,$output);
         //$output = str_replace('@listname',$this->listname,$output);
         //$output = str_replace('@long_desc_subtitle',$this->long_desc_subtitle,$output);
         //$output = str_replace('@long_desc',$this->long_desc,$output);
@@ -56,6 +58,11 @@ class Template
         foreach($this->tabs as $tab)
             $html .= $tab->GenerateTabHTML();
         return $html;
+    }
+
+    function SetDesc($d)
+    {
+        $this->desc = $d;
     }
 
     function SetTitle($t)

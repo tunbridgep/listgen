@@ -208,9 +208,11 @@ class Section
 
     public function GetContentString()
     {
-        $html = '<a name="'.$this->sectionlink_name.'"></a>';
-        $html .= "<h2>".$this->GetNiceName()."</h2>";
+        $html  = '<div class="section" section-id="'.$this->section_counter.'" tab-id="'.$this->tab_counter.'"';
+        $html .= '<a name="'.$this->sectionlink_name.'"></a>';
+        $html .= '<h2>'.$this->GetNiceName().' <span title-id="title_'.$this->tab_counter.'_'.$this->section_counter.'"></span></h2>';
         $html .= implode("\n",$this->content);
+        $html .= '</div>';
         return $html;
     }
 
@@ -227,6 +229,11 @@ class Section
     public function GetSectionLinkName()
     {
         return $this->sectionlink_name;
+    }
+
+    public function GetHash()
+    {
+        return $this->section_counter;
     }
 
     public function GetNiceName()

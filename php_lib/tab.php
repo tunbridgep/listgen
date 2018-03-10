@@ -79,7 +79,7 @@ class Tab
         $html = "<ul>";
         foreach($this->sections as $section)
         {
-            $html .= '<li><a href="#'.$section->GetSectionLinkName().'">'.$section->GetNiceName()."</li>";
+            $html .= '<li><a href="#'.$section->GetSectionLinkName().'">'.$section->GetNiceName().' <span title-header-id="title_'.$this->hash.'_'.$section->GetHash().'"></span></li>';
         }
         $html .= "</ul>";
         return $html;

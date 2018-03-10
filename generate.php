@@ -13,6 +13,7 @@ $default_link_location = rtrim($default_link_location,"/\\");
 
 $body = new Template($template);
 $body->SetTitle($title);
+$body->SetDesc($desc);
 $tabs = 0;
 
 #generate all tabs

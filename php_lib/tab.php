@@ -8,15 +8,15 @@ class Tab
     private $long_desc_subtitle;
     private $path;
     private $sections = array();
-    private $tab_counter;
+    private $hash;
 
-    public function __construct($name,$desc,$subtitle,$path,$counter)
+    public function __construct($name,$desc,$subtitle,$path,$hash)
     {
         $this->listname = $name;
         $this->long_desc = $desc;
         $this->long_desc_subtitle = $subtitle;
         $this->path = $path;
-        $this->tab_counter = $counter;
+        $this->hash = $hash;
         $this->PopulateTab();
     }
     
@@ -50,7 +50,9 @@ class Tab
         foreach(glob($folders) as $section)
         {
             #echo "\t".$section."\n";
-            $s = new Section($default_link_location,$default_link_space_character,count($this->sections),$this->tab_counter);
+            $hash = hash('md5',basename($section));
+            #$s = new Section($default_link_location,$default_link_space_character,$hash,$this->tab_counter);
+            $s = new Section($default_link_location,$default_link_space_character,$hash,$this->hash);
             $s->GenerateSection($section);
 
             $this->sections[] = $s;
@@ -86,10 +88,10 @@ class Tab
     public function GenerateTabHTML()
     {
         $html = '<div class="tab-pane" data-tab="'.$this->listname.'" id="tab'.$this->listname.'">'.
-                "\t".'<div id="intro">'."\n".
-                "\t\t".'<p>'.$this->long_desc.'</p>'."\n".
-                "\t\t".'<p><em>'.$this->long_desc_subtitle.'</em></p>'.
-                "\t".'</div>'.
+                #"\t".'<div id="intro">'."\n".
+                #"\t\t".'<p>'.$this->long_desc.'</p>'."\n".
+                #"\t\t".'<p><em>'.$this->long_desc_subtitle.'</em></p>'.
+                #"\t".'</div>'.
                 "\t".'<div class="ListHeaderSection">'.
                 "\t\t".$this->GetHeader().
                 "\t</div>".

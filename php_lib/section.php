@@ -62,7 +62,9 @@ class Section
             return str_replace("@ign","",$line);
         else
         {
-            $line = str_replace("<li>","<li><label><input type=\"checkbox\" tab-id=\"".$this->tab_counter."\" section-id=\"".$this->section_counter."\" type=\"checkbox\" data-id=\"list_".$this->tab_counter."_".$this->section_counter."_".($this->checkbox_count++)."\"/>",$line);
+            $this->checkbox_count++;
+            $hash = hash("md5",$line);
+            $line = str_replace("<li>","<li><label><input type=\"checkbox\" tab-id=\"".$this->tab_counter."\" section-id=\"".$this->section_counter."\" checkbox-id=\"".$hash."\" type=\"checkbox\" data-id=\"list_".$this->tab_counter."_".$this->section_counter."_".$hash."\"/>",$line);
             if (strpos($line,"<ul>") !== FALSE)
                 $line = str_replace("<ul>","</label><ul>",$line);
             else
@@ -233,3 +235,4 @@ class Section
     }
 } 
 ?>
+

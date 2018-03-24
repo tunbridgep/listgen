@@ -47,7 +47,7 @@ class Template
     {
         $output = '<ul>';
         foreach($this->tabs as $num => $tab)
-                $output .= '<li data-tab-nav="'.$tab->GetName().'"><a href="javascript:void(0)">'.$tab->GetName().'</a></li>';
+                $output .= '<li data-tab-nav="'.$tab->GetName().'"><a href="javascript:void(0)">'.$tab->GetNiceName().'</a></li>';
         $output .= '</ul>';
         return $output;
     }

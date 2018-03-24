@@ -6,9 +6,18 @@ function DocumentLoad()
     for(var i = 0;i < checkboxes.length;i++)
     {
         var id = checkboxes[i].getAttribute("data-id");
-        var istrue = $.jStorage.get(id,true);
-        checkboxes[i].checked = istrue;
-        checkboxes[i].onclick = function() { ToggleCheckbox(this.getAttribute("data-id")); };
+        var istrue = $.jStorage.get(id,false);
+        if (istrue)
+            checkboxes[i].checked = true;
+        else
+            checkboxes[i].checked = false;
+
+        var readonly = checkboxes[i].getAttribute("readonly");
+        if (readonly)
+            checkboxes[i].onclick = function() { return false; };
+        else
+            checkboxes[i].onclick = function() { ToggleCheckbox(this.getAttribute("data-id")); };
+        SetSummarySections(id);
     }
 
     var sections = document.querySelectorAll('[class="section"]');
@@ -70,40 +79,95 @@ function prepare_tabs()
 function ToggleCheckbox(id)
 {
     element = document.querySelectorAll('[data-id="'+id+'"]')[0];
+    if (!element)
+        return;
     tag = element.attributes.getNamedItem('data-tag');
     debugger;
 
+    StoreCheck(element);
+
+    //check or uncheck all other checkboxes containing the same tag
     if (tag)
     {
-        similar_elements = document.querySelectorAll('[data-tag="'+tag.value+'"]');
-        for (i = 0;i < similar_elements.length; i++)
+        var others = document.querySelectorAll('[type="checkbox"][data-tag="'+tag.value+'"]');
+        for (i = 0;i < others.length;i++)
         {
-            similar_element_id = similar_elements[i].attributes.getNamedItem('data-id').value;
-            current_element_id = element.attributes.getNamedItem('data-id').value;
-            if (similar_element_id != current_element_id)
+            other_id = others[i].getAttribute('data-id');
+            change = others[i].getAttribute('tag-change') == "true";
+            if (other_id != id && change) //don't change ourself, and only change if we allow changing
             {
-                if (element.checked == true)
-                {
-                    similar_elements[i].checked = true;
-                    $.jStorage.set(similar_element_id,true);
-                }
-                else
-                {
-                    similar_elements[i].checked = false;
-                    $.jStorage.set(similar_element_id,false);
-                }
+                others[i].checked = element.checked;
+                StoreCheck(others[i]);
             }
         }
     }
 
-    if (element.checked == false)
-        $.jStorage.set(id,false);
-    else if (element.checked == true)
-        $.jStorage.set(id,true);
-
+    SetSummarySections(id);
     var section = element.getAttribute("section-id");
     var tab = element.getAttribute("tab-id");
     UpdateHeader(section,tab);
+}
+
+function StoreCheck(element)
+{
+    if (element)
+    {
+        id = element.getAttribute('data-id');
+        if (id)
+        {
+            if (element.checked == false)
+                $.jStorage.set(id,false);
+            else if (element.checked == true)
+                $.jStorage.set(id,true);
+        }
+    }
+}
+
+function SetSummarySections(id)
+{
+    element = document.querySelectorAll('[data-id="'+id+'"]')[0];
+    tag = element.attributes.getNamedItem('data-tag');
+    debugger; 
+
+    if (tag)
+    {
+        var checkboxes = document.querySelectorAll('[type="checkbox"][data-tag="'+tag.value+'"]');
+        summary_elements = document.querySelectorAll('span.readonly[data-tag="'+tag.value+'"]','span.readonly.in-progress[data-tag="'+tag.value+'"]','span.readonly.incomplete[data-tag="'+tag.value+'"]','span.readonly.complete[data-tag="'+tag.value+'"]');
+
+        //check if all the checkboxes are checked
+        count = 0;
+        for (i = 0;i < checkboxes.length;i++)
+            if (checkboxes[i].checked == true)
+                count++;
+
+        for (i = 0;i < summary_elements.length; i++)
+        {
+            if (count == checkboxes.length)
+            {
+                summary_elements[i].innerHTML = "&#10004;";
+                summary_elements[i].classList.add('complete');
+                summary_elements[i].classList.remove('incomplete');
+                summary_elements[i].classList.remove('in-progress');
+            }
+            else if (count == 0)
+            {
+                summary_elements[i].innerHTML = "&#10006;";
+                summary_elements[i].classList.add('incomplete');
+                summary_elements[i].classList.remove('complete');
+                summary_elements[i].classList.remove('in-progress');
+            }
+            else
+            {
+                summary_elements[i].innerHTML = "&#10070;";
+                summary_elements[i].classList.add('in-progress');
+                summary_elements[i].classList.remove('complete');
+                summary_elements[i].classList.remove('incomplete');
+            }
+            var section = summary_elements[i].getAttribute("section-id");
+            var tab = summary_elements[i].getAttribute("tab-id");
+            UpdateHeader(section,tab);
+        }
+    }
 }
 
 function ClearAll()
@@ -136,14 +200,18 @@ function UpdateHeader(section,tab)
 {
     debugger;
     var checkboxes = document.querySelectorAll('[type="checkbox"][tab-id="'+tab+'"][section-id="'+section+'"]');
+    var summaries = document.querySelectorAll('.readonly[tab-id="'+tab+'"][section-id="'+section+'"]');
 
-    if (checkboxes.length == 0)
+    if (checkboxes.length == 0 && summaries.length == 0)
         return;
 
-    var total = checkboxes.length;
+    var total = checkboxes.length + summaries.length;
     var count = 0;
-    for (var i = 0;i < total;i++)
+    for (var i = 0;i < checkboxes.length;i++)
         if (checkboxes[i].checked == true)
+            count++;
+    for (var j = 0;j < summaries.length;j++)
+        if (summaries[j].classList.contains('complete'))
             count++;
 
     var title = document.querySelectorAll('[title-id="title_'+tab+'_'+section+'"]')[0];

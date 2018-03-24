@@ -1,7 +1,3 @@
-.in_progress { color: #CC6600; }
-.done { color: #009933; }
-.important {color: red; font-weight: bold; }
-
 .container
 {
     max-width: 1170px;
@@ -138,6 +134,33 @@ body
     display:inline;
 }
 
+.readonly
+{
+    color: gray;
+}
+
+.readonly.complete
+{
+    color: green;
+}
+
+.readonly.incomplete
+{
+    color: red;
+}
+
+.readonly.in-progress
+{
+    color: orange;
+}
+
+.readonly input
+{
+    color: red;
+    background-color: red;
+    border: 1px solid red;
+}
+
 /* End Body Stuff */
 
 /* Heading stuff */
@@ -169,3 +192,8 @@ h3 a
 }
 
 /* End Heading stuff */
+
+.in_progress { color: #CC6600; }
+.done { color: #009933; }
+.important {color: red; font-weight: bold; }
+.important a {color: indianred; font-weight: bold; }

@@ -45,7 +45,7 @@ class Tab
         global $default_link_location;
         global $default_link_space_character;
 
-        $folders = $this->path."/*";
+        $folders = $this->path."/*.md";
         #echo $folders."\n";
         foreach(glob($folders) as $section)
         {
@@ -63,6 +63,15 @@ class Tab
     {
         return $this->listname;
     }
+    
+    public function GetNiceName()
+    {
+        $no_number = ltrim($this->listname,"0123456789"); #strip numbers
+        $no_underscore = str_replace('_',' ',$no_number); #convert underscores to spaces
+        $case = ucwords($no_underscore); #convert words to title case
+
+        return $case;
+    }
 
     private function GetContent()
     {
@@ -79,7 +88,7 @@ class Tab
         $html = "<ul>";
         foreach($this->sections as $section)
         {
-            $html .= '<li><a href="#'.$section->GetSectionLinkName().'">'.$section->GetNiceName().' <span title-header-id="title_'.$this->hash.'_'.$section->GetHash().'"></span></li>';
+            $html .= '<li><a href="#'.$section->GetName().'">'.$section->GetNiceName().'</a> <span title-header-id="title_'.$this->hash.'_'.$section->GetHash().'"></span></li>';
         }
         $html .= "</ul>";
         return $html;

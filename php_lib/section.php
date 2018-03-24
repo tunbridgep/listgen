@@ -46,7 +46,8 @@ class Section
             #replace line text with it's parsed version
             $checkbox = $this->GenerateCheckbox($text);
             $tagged = $this->GenerateTag($checkbox);
-            $html_lines[$line] = $this->ParseSpecial($tagged);
+            $special = $this->ParseSpecial($tagged);
+            $html_lines[$line] = $special;
         }
 
         #once we have done string modifications, we can then store the result
@@ -60,11 +61,18 @@ class Section
     {
         if(strpos($line,"@ign") !== FALSE)
             return str_replace("@ign","",$line);
+        else if(strpos($line,"@readonly") !== FALSE)
+        {
+            $line = str_replace("@readonly","",$line);
+            $line = str_replace('<li>','<li><span class="readonly" tab-id="'.$this->tab_counter.'" section-id="'.$this->section_counter.'"></span> ',$line);
+            return $line;
+        }
         else
         {
             $this->checkbox_count++;
             $hash = hash("md5",$line);
             $line = str_replace("<li>","<li><label><input type=\"checkbox\" tab-id=\"".$this->tab_counter."\" section-id=\"".$this->section_counter."\" checkbox-id=\"".$hash."\" type=\"checkbox\" data-id=\"list_".$this->tab_counter."_".$this->section_counter."_".$hash."\"/>",$line);
+            
             if (strpos($line,"<ul>") !== FALSE)
                 $line = str_replace("<ul>","</label><ul>",$line);
             else
@@ -77,15 +85,25 @@ class Section
     #Do any special parsing that the line needs
     private function ParseSpecial($line)
     {
+        $str = $line;
         if(strpos($line,"@imp") !== FALSE)
         {
-            $str = str_replace("@imp","",$line);
-            $str = str_replace("<li>","<li class=\"important\">",$str);
-            $str = str_replace("<p>","<p class=\"important\">",$str);
-            return $str;
+            $str = str_replace("@imp","",$str);
+            $str = str_replace("<li","<li class=\"important\"",$str);
+            $str = str_replace("<p","<p class=\"important\"",$str);
         }
-        else
-            return $line;
+
+        if(strpos($line,"data-tag") !== FALSE)
+        {
+            if(strpos($line,"@nochange") !== FALSE)
+            {
+                $str = str_replace("@nochange","",$str);
+                $str = str_replace("<input","<input tag-change=\"false\"",$str);
+            }
+            else
+                $str = str_replace("<input","<input tag-change=\"true\"",$str);
+        }
+        return $str;
     }
 
     private function GenerateTag($line)
@@ -117,9 +135,15 @@ class Section
         #remove @tag from original string
         $line = str_replace("@tag{".$tag."}","",$line);
 
+
         #modify HTML to contain tag name in the input data-tag field
         if ($tag != "")
-            return str_replace("<input","<input data-tag=\"".$tag."\"",$line);
+        {
+            if(strpos($line,'class="readonly"') !== FALSE)
+                return str_replace("<span","<span data-tag=\"".$tag."\"",$line);
+            else
+                return str_replace("<input","<input data-tag=\"".$tag."\"",$line);
+        }
         else
             return $line;
 
@@ -208,8 +232,8 @@ class Section
 
     public function GetContentString()
     {
-        $html  = '<div class="section" section-id="'.$this->section_counter.'" tab-id="'.$this->tab_counter.'"';
-        $html .= '<a name="'.$this->sectionlink_name.'"></a>';
+        $html  = '<a name="'.$this->sectionlink_name.'"></a>'."\n";
+        $html .= '<div class="section" section-id="'.$this->section_counter.'" tab-id="'.$this->tab_counter.'">';
         $html .= '<h2>'.$this->GetNiceName().' <span title-id="title_'.$this->tab_counter.'_'.$this->section_counter.'"></span></h2>';
         $html .= implode("\n",$this->content);
         $html .= '</div>';

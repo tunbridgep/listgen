@@ -33,7 +33,10 @@ class Section
         foreach($lines as $line => $text)
         {
             #replace line text with it's parsed version
-            $lines[$line] = $this->GenerateLinks($text);
+            #$lines[$line] = $this->GenerateLinks($text);
+            $linked = $this->GenerateLinks($text);
+            $get_img = $this->GenerateImg($linked);
+            $lines[$line] = $get_img;
         }
 
         #get HTML for the md file
@@ -104,6 +107,67 @@ class Section
                 $str = str_replace("<input","<input tag-change=\"true\"",$str);
         }
         return $str;
+    }
+
+    private function GenerateImg($line)
+    {
+        global $standalone;
+        #get a start point
+        $pos = strpos($line,"@img{");
+        $after = substr($line,$pos);
+
+        #make sure we have an opening and closing brace
+        if ($pos === FALSE || strpos($after,"}") == FALSE)
+            return $line;
+
+        #our end point is at the same location as our start point
+        $forward = 0;
+
+        #keep moving the end point towards the end of the string until we find the closing brace
+        $character = "";
+        do
+        {
+            $forward++;
+            $character = substr($line,$pos + $forward,1);
+        }
+        while ($character !== "}");
+
+        #calculate tag using our start and end points
+        #we are offseting by 5 to remove the @tag{ characters from the string
+        $url = substr($line,$pos+5,$forward-5);
+
+        $local = $this->IsLocalURL($url);
+
+        #echo "url: ".$url."\n";
+
+        if ($local || $standalone)
+        {
+            $img = file_get_contents($url);
+            $ext = pathinfo($url)['extension'];
+
+            #check if something failed
+            if ($img === FALSE || $ext == "")
+                return $line;
+            
+            $b64 = base64_encode($img);
+
+            #echo "URL is local\nextension: ".$ext."\n";
+            #echo "b64: ".$b64."\n";
+
+            #generate an img tag from image link
+            $line = str_replace("@img{".$url."}",'<img src="data:image/'.$ext.';base64,'.$b64.'">',$line);
+        }
+        else
+        {
+            #we are using an external image. Link to it directly
+            $line = str_replace("@img{".$url."}",'<img src="'.$url.'">',$line);
+        }
+        return $line;
+    }
+
+    private function IsLocalURL($url)
+    {
+        return realpath($url) != "";
     }
 
     private function GenerateTag($line)

@@ -1,6 +1,6 @@
 .container
 {
-    max-width: 1170px;
+    max-width: 1270px;
     text-align: left;
     margin-left: auto;
     margin-right: auto;
@@ -48,6 +48,28 @@ body
     padding-right: 30px;
 }
 
+.navbar-inner ul
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+.navbar-inner li
+{
+    display: inline-block;
+    border: 1px solid gray;
+    //border-left: 0px;
+    border-bottom: 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.navbar-inner li.active
+{
+    //border: 1px solid gray;
+    background-color: gray;
+    color: white;
+}
+
 .navbar-inner li a
 {
     padding: 8px;
@@ -60,24 +82,7 @@ body
 {
     padding-left: 7px;
     padding-right: 7px;
-}
-
-.navbar-inner ul
-{
-    margin: 0px;
-    padding: 0px;
-}
-
-.navbar-inner li
-{
-    display: inline-block;
-}
-
-.navbar-inner li.active
-{
-    border: 1px solid gray;
-    border-bottom: 0px;
-    border-radius: 5px 5px 0px 0px;
+    color: white;
 }
 
 /* End Navbar stuff */

@@ -17,15 +17,15 @@
     <div class="container">
         <div class="navbar">
             <div class="navbar-inner">
+                <div class="profile" style="float: right;">
+                    <a href="#" onclick="ClearAll()">Clear All</a>
+                    <a href="#" onclick="SelectAll()">Select All</a>
+                </div>
                 <h1>@title</h1>
                 <p>@desc</p>
                 <ul class="nav nav-tabs">
                     @tabs
                 </ul>
-                <div class="profile" style="float: right;">
-                    <a href="#" onclick="ClearAll()">Clear All</a>
-                    <a href="#" onclick="SelectAll()">Select All</a>
-                </div>
             </div>
         </div>
         <div class="tab-content">

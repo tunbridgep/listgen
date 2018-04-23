@@ -124,6 +124,17 @@ body
     line-height: 20px;
 }
 
+.tab-content table
+{
+    border: 1px solid gray;
+    border-collapse: collapse;
+}
+
+.tab-content td, .tab-content tr, .tab-content th
+{
+    border: 1px solid gray;
+}
+
 .collapse *
 {
     display: none;

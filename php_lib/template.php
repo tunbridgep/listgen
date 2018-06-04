@@ -40,7 +40,26 @@ class Template
         //$output = str_replace('@header',$this->header,$output);
         $output = str_replace('@tabs',$this->GetTabsString(),$output);
         $output = str_replace('@tab_section',$this->GetAllTabsHTML(),$output);
+        $output = str_replace('@filters',$this->GetFilterString(),$output);
+
         return $output;
+    }
+
+    private function GetFilterString()
+    {
+        global $filters;
+        if (count($filters) > 0)
+        {
+            $output = "<ul>";
+            $output .= '<li data-filter-none="No Filter"><a href="javascript:void(0)">No Filter</a></li>';
+            foreach($filters as $num => $filter)
+            {
+                if ($filter instanceof Filter)
+                    $output .= '<li data-filter="'.$filter->GetFilter().'"><a href="javascript:void(0)">'.$filter->GetName().'</a></li>';
+            }
+            $output .= "</ul>";
+            return $output;
+        }
     }
 
     private function GetTabsString()

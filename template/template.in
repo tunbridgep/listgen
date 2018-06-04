@@ -29,7 +29,12 @@
             </div>
         </div>
         <div class="tab-content">
-            @tab_section
+            <div class="filters">
+                @filters
+            </div>
+            <div class="content">
+                @tab_section
+            </div>
         </div>
     </div>
 </body>

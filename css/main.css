@@ -90,6 +90,29 @@ body
 
 /* Body Stuff */
 
+/* filters */
+
+.filter-active
+{
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+.section .filter-highlight
+{
+}
+
+.section .filter-unhighlight,
+.section .filter-unhighlight a,
+.section .filter-unhighlight .complete,
+.section .filter-unhighlight .incomplete
+{
+    color: lightgray;
+}
+
+/* end filters */
+
+
 .tab-pane
 {
     display: none;

@@ -1,12 +1,12 @@
 <?php
 
+foreach(glob("php_lib/*.php") as $filename)
+    require_once($filename);
+
 echo "Reading Config file\n\n";
 require("config.php");
 
 echo "Generating output file ".$output."\n\n";
-foreach(glob("php_lib/*.php") as $filename)
-    require_once($filename);
-
 
 $default_link_location = rtrim($default_link_location,"/\\");
 

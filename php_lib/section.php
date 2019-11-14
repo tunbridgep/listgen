@@ -241,7 +241,7 @@ class Section
             $pos_length = $pos+$count_end-$pos_start;
 
 
-            $link_text_unsanitised = substr($line,$pos_start,$pos_length) . "\n\n\n\n";
+            $link_text_unsanitised = substr($line,$pos_start,$pos_length);
             $link_text = str_replace(" ",$this->link_space,$link_text_unsanitised);
             $link_text = trim($this->link_prefix . "/" . $link_text);
 

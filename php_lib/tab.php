@@ -45,6 +45,8 @@ class Tab
         global $default_link_location;
         global $default_link_space_character;
 
+        $default_link_location = rtrim($default_link_location,"/\\");
+
         $folders = $this->path."/*.md";
         #echo $folders."\n";
         foreach(glob($folders) as $section)

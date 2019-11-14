@@ -6,12 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@desc">
     <meta name="author" content="Paul Tunbridge based on Dark Souls Cheat Sheet by Stephen McNabb">
-    <style type="text/css">
-        @css
-    </style>
-    <script type="text/javascript">
-        @js
-    </script>
+    @css
+    @js
 </head>
 <body onload="DocumentLoad()">
     <div class="container">

@@ -8,9 +8,6 @@ require("config.php");
 
 echo "Generating output file ".$output."\n\n";
 
-$default_link_location = rtrim($default_link_location,"/\\");
-
-
 $body = new Template($template);
 $body->SetTitle($title);
 $body->SetDesc($desc);
@@ -33,4 +30,4 @@ foreach(glob("css/*.css") as $filename) $body->AddCSSFile($filename);
 @unlink($output);
 file_put_contents($output,$body->GetText());
 
-die();
+?>

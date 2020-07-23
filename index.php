@@ -35,8 +35,10 @@ if (isset($_GET['page']))
     require($location."/config.php");
     $body = generate_file($location);
 
-    $body->AddJSFile("js/common.js");
-    $body->AddJSFile("js/hosted.js");
+    //$body->AddJSFile("js/common.js");
+    //$body->AddJSFile("js/hosted.js");
+    $body->AddJSFile("js/_jstorage.js");
+    $body->AddJSFile("js/unhosted.js");
     foreach(glob("css/*.css") as $filename) $body->AddCSSLink($filename);
 
     echo $body->GetText();
